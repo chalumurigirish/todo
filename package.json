@@ -12,10 +12,15 @@
     "@chakra-ui/react": "^2.0.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "firebase": "^9.8.1",
+    "formik": "^2.2.9",
     "framer-motion": "^6",
+    "graphql": "^16.5.0",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "urql": "^2.2.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "8.15.0",
