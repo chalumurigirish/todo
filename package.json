@@ -13,6 +13,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "firebase": "^9.8.1",
+    "firebase-admin": "^10.2.0",
     "formik": "^2.2.9",
     "framer-motion": "^6",
     "graphql": "^16.5.0",
