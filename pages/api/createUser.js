@@ -13,19 +13,18 @@ const firebaseAdminConfig = {
   client_x509_cert_url: process.env.FB_CLIENT_CERT_URL,
 };
 
-if (admin.apps.length === 0) {
-  console.log('initializeApp');
-  admin.initializeApp({
-    credential: admin.credential.cert(firebaseAdminConfig),
-  });
-} else {
-  console.log('already initialized');
-}
-
 const createUser = async (req, res) => {
   const { email, password, displayName } = req.body.input.credentials;
 
   try {
+    if (admin?.apps?.length === 0) {
+      console.log('initializeApp');
+      await admin.initializeApp({
+        credential: admin.credential.cert(firebaseAdminConfig),
+      });
+    } else {
+      console.log('already initialized');
+    }
     const user = await admin.auth().createUser({
       email: email,
       password: password,
