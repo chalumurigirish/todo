@@ -34,9 +34,11 @@ const firebaseAdminConfig = {
 // export default admin;
 
 const register = async (req, res) => {
-  await admin.initializeApp({
-    credential: admin.credential.cert(firebaseAdminConfig),
-  });
+  if (admin?.apps?.length === 0) {
+    await admin.initializeApp({
+      credential: admin.credential.cert(firebaseAdminConfig),
+    });
+  }
 
   const { email, password, displayName } = req.body.input.credentials;
 
