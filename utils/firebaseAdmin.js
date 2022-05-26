@@ -18,6 +18,7 @@ const firebaseAdminConfig = {
     await admin.initializeApp({
       credential: admin.credential.cert(firebaseAdminConfig),
     });
+    console.log('initialization');
   } catch (error) {
     if (!/already exists/u.test(error.message)) {
       console.error('Firebase admin initialization error', error.stack);
