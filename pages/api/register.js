@@ -31,22 +31,13 @@ const firebaseAdminConfig = {
     'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k6wd1%40hasura-nextjs-78bc7.iam.gserviceaccount.com',
 };
 
-(async () => {
-  try {
-    await admin.initializeApp({
-      credential: admin.credential.cert(firebaseAdminConfig),
-    });
-    console.log('initialization');
-  } catch (error) {
-    if (!/already exists/u.test(error.message)) {
-      console.error('Firebase admin initialization error', error.stack);
-    }
-  }
-})();
-
 // export default admin;
 
 const register = async (req, res) => {
+  await admin.initializeApp({
+    credential: admin.credential.cert(firebaseAdminConfig),
+  });
+
   const { email, password, displayName } = req.body.input.credentials;
 
   try {
