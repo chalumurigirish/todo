@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
 
 const firebaseAdminConfig = {
   type: process.env.FB_TYPE,
@@ -16,15 +17,16 @@ const firebaseAdminConfig = {
 const createUser = async (req, res) => {
   const { email, password, displayName } = req.body.input.credentials;
 
+  if (admin?.apps?.length === 0) {
+    console.log('initializeApp');
+    const app = await admin.initializeApp({
+      credential: admin.credential.cert(firebaseAdminConfig),
+    });
+  } else {
+    console.log('already initialized');
+  }
+
   try {
-    if (admin?.apps?.length === 0) {
-      console.log('initializeApp');
-      await admin.initializeApp({
-        credential: admin.credential.cert(firebaseAdminConfig),
-      });
-    } else {
-      console.log('already initialized');
-    }
     const user = await admin.auth().createUser({
       email: email,
       password: password,
