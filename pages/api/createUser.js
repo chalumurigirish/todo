@@ -1,25 +1,25 @@
-import * as admin from 'firebase-admin';
-import { initializeApp } from 'firebase-admin/app';
+// import * as admin from 'firebase-admin';
+// import { initializeApp } from 'firebase-admin/app';
 
-const firebaseAdminConfig = {
-  type: process.env.FB_TYPE,
-  project_id: process.env.FB_PROJECT_ID,
-  private_key_id: process.env.FB_PRIVATE_KEY_ID,
-  private_key: process.env.FB_PRIVATE_KEY,
-  client_email: process.env.FB_CLIENT_EMAIL,
-  client_id: process.env.FB_CLIENT_ID,
-  auth_uri: process.env.FB_AUTH_URI,
-  token_uri: process.env.FB_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FB_PROVIDER_CERT_URL,
-  client_x509_cert_url: process.env.FB_CLIENT_CERT_URL,
-};
+// const firebaseAdminConfig = {
+//   type: process.env.FB_TYPE,
+//   project_id: process.env.FB_PROJECT_ID,
+//   private_key_id: process.env.FB_PRIVATE_KEY_ID,
+//   private_key: process.env.FB_PRIVATE_KEY,
+//   client_email: process.env.FB_CLIENT_EMAIL,
+//   client_id: process.env.FB_CLIENT_ID,
+//   auth_uri: process.env.FB_AUTH_URI,
+//   token_uri: process.env.FB_TOKEN_URI,
+//   auth_provider_x509_cert_url: process.env.FB_PROVIDER_CERT_URL,
+//   client_x509_cert_url: process.env.FB_CLIENT_CERT_URL,
+// };
 
 const createUser = async (req, res) => {
-  const { email, password, displayName } = req.body.input.credentials;
+  // const { email, password, displayName } = req.body.input.credentials;
   res.status(200).json({
     id: 'girish',
-    email,
-    displayName,
+    email: 'sddbsdfj',
+    displayName: 'fdssfhdsfadskjf',
   });
 
   //   if (admin?.apps?.length === 0) {
