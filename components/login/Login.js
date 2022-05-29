@@ -1,32 +1,31 @@
 import { useState, useEffect } from 'react';
+import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 import {
-  Center,
   VStack,
   Heading,
-  FormControl,
-  FormLabel,
-  Input,
   HStack,
   Text,
   Button,
-  Link,
   Container,
-  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
 
 import FormikInput from '@/components/shared/FormikInput';
-// import { initialValues, onSubmitHandler } from './formik/exports';
 import { allFields } from './formik/inputs';
 import { useAuthContext } from '@/utils/context/AuthContext';
+import RegisterUserMutation from '@/graphql/user_queries/create';
+import LoginUserMutation from '@/graphql/user_queries/loginThroughBackend';
 
 const Login = () => {
   const [showSignup, setShowSignup] = useState(false);
 
+  const [insertUserResult, insertUser] = useMutation(RegisterUserMutation);
+  const [insertLoginResult, insertLogin] = useMutation(LoginUserMutation);
+
   const router = useRouter();
-  const { loggedInUser, register, login } = useAuthContext();
+  const { loggedInUser, register, login, setLoggedInUser } = useAuthContext();
 
   const initialValues = {
     email: '',
@@ -34,10 +33,40 @@ const Login = () => {
     confirmPassword: '',
   };
 
+  const registerUser = async (email, password) => {
+    try {
+      const variables = {
+        email: email,
+        password: password,
+        displayName: '', // intentional future changes needed
+      };
+      const { data } = await insertUser(variables);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loginUser = async (email, password) => {
+    // window.localStorage.clear();
+    try {
+      const variables = { email: email, password: password };
+      const response = await insertLogin(variables);
+      console.log(response);
+
+      setLoggedInUser({ accessToken: data.loginUser.accessToken, email });
+      // console.log(data);
+      window.localStorage.setItem('accessToken', data.loginUser.accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onSubmitHandler = ({ email, password }, actions) => {
     console.log(email, password);
     {
-      showSignup ? register(email, password) : login(email, password);
+      // showSignup ? register(email, password) : login(email, password);
+      showSignup ? registerUser(email, password) : loginUser(email, password);
     }
     actions.resetForm();
   };
@@ -59,7 +88,7 @@ const Login = () => {
     }),
   });
 
-useEffect(() => {
+  useEffect(() => {
     console.log('rendered', loggedInUser);
     if (loggedInUser) {
       router.push('/todo');

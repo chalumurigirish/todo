@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }) => {
     login,
     logout,
     loggedInUser,
+    setLoggedInUser,
   };
 
   useEffect(() => {

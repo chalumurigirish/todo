@@ -1,29 +1,48 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Container,
   VStack,
   Heading,
   FormControl,
-  FormLabel,
   Input,
   HStack,
   Text,
   Button,
-  Checkbox,
 } from '@chakra-ui/react';
 
 import IndividualTodo from './IndividualTodo';
 import { useAuthContext } from '@/utils/context/AuthContext';
 
 const Todo = () => {
-  const { loggedInUser, logout } = useAuthContext();
+  const { loggedInUser, logout, setLoggedInUser } = useAuthContext();
+  const router = useRouter();
 
   console.log(loggedInUser);
+
+  const loggingOutUser = () => {
+    // logout();
+    // console.log(loggedInUser); // loggedInUser has previous value even after logout
+    setLoggedInUser(false);
+  };
+
+  useEffect(() => {
+    // console.log('rendered', loggedInUser);
+    if (!loggedInUser) {
+      router.push('/login');
+    }
+  }, [loggedInUser]);
+
   return (
     <Container maxW='full' pt='4'>
       <HStack justify='space-between'>
         <Text>{loggedInUser?.email}</Text>
-        <Button onClick={() => logout()} variant='outline' colorScheme={'blue'}>
+        <Button
+          onClick={() => loggingOutUser()}
+          variant='outline'
+          colorScheme={'blue'}
+        >
           Logout
         </Button>
       </HStack>
