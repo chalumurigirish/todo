@@ -52,7 +52,7 @@ const Login = () => {
     try {
       const variables = { email: email, password: password };
       const response = await insertLogin(variables);
-      console.log(response);
+      console.log(window);
 
       setLoggedInUser({ accessToken: data.loginUser.accessToken, email });
       // console.log(data);

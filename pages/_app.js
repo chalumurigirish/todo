@@ -7,13 +7,13 @@ import { client } from '@/utils/urql';
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <Provider value={client}>
-      <AuthContextProvider>
-        <ChakraProvider>
+    <ChakraProvider>
+      <Provider value={client}>
+        <AuthContextProvider>
           <Component {...pageProps} />
-        </ChakraProvider>
-      </AuthContextProvider>
-    </Provider>
+        </AuthContextProvider>
+      </Provider>
+    </ChakraProvider>
   );
 };
 
