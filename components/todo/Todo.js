@@ -11,20 +11,67 @@ import {
   Text,
   Button,
 } from '@chakra-ui/react';
+import { Formik } from 'formik';
+import { useMutation } from 'urql';
 
-import IndividualTodo from './IndividualTodo';
+import FormikInput from '@/components/shared/FormikInput';
+import DisplayAllTodo from '@/components/todo/DisplayAllTodo';
+import { newTodo } from '@/graphql/todo_queries/newTodo';
+import { updateTodo } from '@/graphql/todo_queries/updateTodo';
+
+import { useTodoContext } from '@/utils/context/Todo/TodoContext';
 import { useAuthContext } from '@/utils/context/AuthContext';
 
 const Todo = () => {
   const { loggedInUser, logout, setLoggedInUser } = useAuthContext();
   const router = useRouter();
 
-  console.log(loggedInUser);
+  // console.log(loggedInUser);
+
+  const [addTodoMutationResult, addTodoMutation] = useMutation(newTodo);
+  const [updateTodoMutationResult, updateTodoMutation] =
+    useMutation(updateTodo);
+
+  const {
+    todoList,
+    setTodoList,
+    allFields,
+    initialValues,
+    editingTodo,
+    setEditingTodo,
+  } = useTodoContext();
 
   const loggingOutUser = () => {
-    // logout();
+    logout();
     // console.log(loggedInUser); // loggedInUser has previous value even after logout
-    setLoggedInUser(false);
+    // setLoggedInUser(false);
+  };
+
+  const onSubmit = async (values, actions) => {
+    console.log('clicked');
+    if (editingTodo.status) {
+      const variables = { id: editingTodo.id, task: values.task };
+
+      try {
+        const { data } = await updateTodoMutation(variables);
+      } catch (error) {
+        console.error(error);
+      }
+
+      setEditingTodo({
+        status: false,
+        id: null,
+      });
+    } else {
+      try {
+        const variables = { task: values.task };
+        const { data } = await addTodoMutation(variables);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    await actions.resetForm();
   };
 
   useEffect(() => {
@@ -51,13 +98,42 @@ const Todo = () => {
         py={{ md: '24', base: '12' }}
         px={{ sm: '12', base: '0' }}
       >
-        <VStack spacing={5} py={{ base: '4' }}>
-          <Heading>TODO</Heading>
-          <FormControl>
-            <Input placeholder='enter your Todo' type='text' />
-          </FormControl>
-        </VStack>
-        <IndividualTodo />
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+          {(formik) => (
+            <>
+              <form onSubmit={formik.handleSubmit}>
+                <VStack spacing={5} py={{ base: '4' }}>
+                  <Heading>TODO</Heading>
+                  <HStack>
+                    {allFields.map(({ id, label, ...props }) => (
+                      <FormikInput key={id} {...props} />
+                    ))}
+                    {editingTodo.status ? (
+                      <Button
+                        w={48}
+                        colorScheme='blue'
+                        type='submit'
+                        disabled={isSubmitting}
+                      >
+                        Update Task
+                      </Button>
+                    ) : (
+                      <Button
+                        w={48}
+                        colorScheme='blue'
+                        type='submit'
+                        disabled={isSubmitting}
+                      >
+                        Create Task
+                      </Button>
+                    )}
+                  </HStack>
+                </VStack>
+              </form>
+              <DisplayAllTodo />
+            </>
+          )}
+        </Formik>
       </Container>
     </Container>
   );

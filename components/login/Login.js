@@ -47,26 +47,27 @@ const Login = () => {
     }
   };
 
-  const loginUser = async (email, password) => {
-    // window.localStorage.clear();
-    try {
-      const variables = { email: email, password: password };
-      const response = await insertLogin(variables);
-      console.log(window);
+  // const loginUser = async (email, password) => {
+  //   // window.localStorage.clear();
+  //   try {
+  //     const variables = { email: email, password: password };
+  //     const { data } = await insertLogin(variables);
+  //     // console.log(window);
+  //     console.log('data', data);
 
-      setLoggedInUser({ accessToken: data.loginUser.accessToken, email });
-      // console.log(data);
-      window.localStorage.setItem('accessToken', data.loginUser.accessToken);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     window.localStorage.setItem('accessToken', data.loginUser.accessToken);
+
+  //     setLoggedInUser({ accessToken: data.loginUser.accessToken, email });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const onSubmitHandler = ({ email, password }, actions) => {
     console.log(email, password);
     {
       // showSignup ? register(email, password) : login(email, password);
-      showSignup ? registerUser(email, password) : loginUser(email, password);
+      showSignup ? registerUser(email, password) : login(email, password);
     }
     actions.resetForm();
   };
@@ -91,7 +92,7 @@ const Login = () => {
   useEffect(() => {
     console.log('rendered', loggedInUser);
     if (loggedInUser) {
-      router.push('/todo');
+      router.push('/');
     }
   }, [loggedInUser]);
 
