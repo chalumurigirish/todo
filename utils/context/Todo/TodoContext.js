@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useQuery } from 'urql';
 
-import { getTodo } from '@/graphql/todo_queries/getTodo';
+import GetTodo from '@/graphql/todo_queries/getTodo';
 
 const todoContext = createContext();
 
@@ -10,10 +10,10 @@ export const useTodoContext = () => {
 };
 
 const TodoContextProvider = ({ children }) => {
-  const [allTodos, getAllTodos] = useQuery({ query: getTodo });
+  const [allTodos, getAllTodos] = useQuery({ query: GetTodo });
 
   const [todoList, setTodoList] = useState([]);
-  const [isEditing, setIsEditing] = useState({
+  const [editingTodo, setEditingTodo] = useState({
     status: false,
     id: null,
   });
@@ -37,8 +37,8 @@ const TodoContextProvider = ({ children }) => {
     allTodos,
     todoList,
     setTodoList,
-    isEditing,
-    setIsEditing,
+    editingTodo,
+    setEditingTodo,
     ...data,
   };
 

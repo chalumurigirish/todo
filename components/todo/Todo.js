@@ -16,8 +16,8 @@ import { useMutation } from 'urql';
 
 import FormikInput from '@/components/shared/FormikInput';
 import DisplayAllTodo from '@/components/todo/DisplayAllTodo';
-import { newTodo } from '@/graphql/todo_queries/newTodo';
-import { updateTodo } from '@/graphql/todo_queries/updateTodo';
+import NewTodo from '@/graphql/todo_queries/newTodo';
+import UpdateTodo from '@/graphql/todo_queries/updateTodo';
 
 import { useTodoContext } from '@/utils/context/Todo/TodoContext';
 import { useAuthContext } from '@/utils/context/AuthContext';
@@ -28,9 +28,9 @@ const Todo = () => {
 
   // console.log(loggedInUser);
 
-  const [addTodoMutationResult, addTodoMutation] = useMutation(newTodo);
+  const [addTodoMutationResult, addTodoMutation] = useMutation(NewTodo);
   const [updateTodoMutationResult, updateTodoMutation] =
-    useMutation(updateTodo);
+    useMutation(UpdateTodo);
 
   const {
     todoList,
@@ -50,7 +50,7 @@ const Todo = () => {
   const onSubmit = async (values, actions) => {
     console.log('clicked');
     if (editingTodo.status) {
-      const variables = { id: editingTodo.id, task: values.task };
+      const variables = { id: editingTodo.id, task: values.title };
 
       try {
         const { data } = await updateTodoMutation(variables);
@@ -64,7 +64,7 @@ const Todo = () => {
       });
     } else {
       try {
-        const variables = { task: values.task };
+        const variables = { task: values.title };
         const { data } = await addTodoMutation(variables);
       } catch (error) {
         console.error(error);
@@ -113,7 +113,7 @@ const Todo = () => {
                         w={48}
                         colorScheme='blue'
                         type='submit'
-                        disabled={isSubmitting}
+                        disabled={formik.isSubmitting}
                       >
                         Update Task
                       </Button>
@@ -122,7 +122,7 @@ const Todo = () => {
                         w={48}
                         colorScheme='blue'
                         type='submit'
-                        disabled={isSubmitting}
+                        disabled={formik.isSubmitting}
                       >
                         Create Task
                       </Button>
