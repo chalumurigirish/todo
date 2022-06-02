@@ -13,6 +13,7 @@ const HomePage = () => {
         <Text>{loggedInUser?.email}</Text>
         <Link href='/todo'>TODO</Link>
         <Link href='/techStack'>TechStack</Link>
+        <Link href='/login'>Login/signup</Link>
         <Button onClick={() => logout()} variant='outline' colorScheme={'blue'}>
           Logout
         </Button>

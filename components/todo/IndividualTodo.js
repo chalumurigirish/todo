@@ -22,7 +22,7 @@ const IndividualTodo = ({ todo }) => {
       id: todo.id,
     });
 
-    setValue(todo.task);
+    setValue(todo.title);
   };
 
   const deleteTodo = async (id) => {

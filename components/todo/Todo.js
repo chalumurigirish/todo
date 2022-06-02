@@ -1,12 +1,8 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import {
   Container,
   VStack,
   Heading,
-  FormControl,
-  Input,
   HStack,
   Text,
   Button,
@@ -24,9 +20,6 @@ import { useAuthContext } from '@/utils/context/AuthContext';
 
 const Todo = () => {
   const { loggedInUser, logout, setLoggedInUser } = useAuthContext();
-  const router = useRouter();
-
-  // console.log(loggedInUser);
 
   const [addTodoMutationResult, addTodoMutation] = useMutation(NewTodo);
   const [updateTodoMutationResult, updateTodoMutation] =
@@ -43,17 +36,16 @@ const Todo = () => {
 
   const loggingOutUser = () => {
     logout();
-    // console.log(loggedInUser); // loggedInUser has previous value even after logout
-    // setLoggedInUser(false);
   };
 
   const onSubmit = async (values, actions) => {
     console.log('clicked');
     if (editingTodo.status) {
-      const variables = { id: editingTodo.id, task: values.title };
+      const variables = { id: editingTodo.id, title: values.title };
 
       try {
-        const { data } = await updateTodoMutation(variables);
+        const response = await updateTodoMutation(variables);
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -64,8 +56,10 @@ const Todo = () => {
       });
     } else {
       try {
-        const variables = { task: values.title };
+        const variables = { title: values.title };
         const { data } = await addTodoMutation(variables);
+        console.log(data);
+        setTodoList([...todoList, data.insert_todos_one]);
       } catch (error) {
         console.error(error);
       }
@@ -73,13 +67,6 @@ const Todo = () => {
 
     await actions.resetForm();
   };
-
-  useEffect(() => {
-    // console.log('rendered', loggedInUser);
-    if (!loggedInUser) {
-      router.push('/login');
-    }
-  }, [loggedInUser]);
 
   return (
     <Container maxW='full' pt='4'>
@@ -104,7 +91,7 @@ const Todo = () => {
               <form onSubmit={formik.handleSubmit}>
                 <VStack spacing={5} py={{ base: '4' }}>
                   <Heading>TODO</Heading>
-                  <HStack>
+                  <HStack align='baseline'>
                     {allFields.map(({ id, label, ...props }) => (
                       <FormikInput key={id} {...props} />
                     ))}

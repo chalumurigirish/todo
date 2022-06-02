@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 import {
@@ -9,7 +9,7 @@ import {
   Button,
   Container,
 } from '@chakra-ui/react';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 
 import FormikInput from '@/components/shared/FormikInput';
@@ -46,7 +46,7 @@ const Login = () => {
       console.log(error);
     }
   };
-
+  // loginUSer using backend //
   // const loginUser = async (email, password) => {
   //   // window.localStorage.clear();
   //   try {
@@ -88,13 +88,6 @@ const Login = () => {
         .oneOf([yup.ref('password'), null], 'Password mismatch'),
     }),
   });
-
-  useEffect(() => {
-    console.log('rendered', loggedInUser);
-    if (loggedInUser) {
-      router.push('/');
-    }
-  }, [loggedInUser]);
 
   return (
     <Container
@@ -140,7 +133,6 @@ const Login = () => {
                 </Button>
               </HStack>
 
-              {/* button */}
               <Button
                 type='submit'
                 disabled={

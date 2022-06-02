@@ -23,6 +23,10 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      currentUser?.accessToken
+        ? window.localStorage.setItem('accessToken', currentUser?.accessToken)
+        : window.localStorage.removeItem('accessToken');
+
       setLoggedInUser(currentUser);
     });
 

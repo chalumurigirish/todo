@@ -45,8 +45,8 @@ const TodoContextProvider = ({ children }) => {
   useEffect(() => {
     const { data, fetching, error } = allTodos;
 
-    if (data) {
-      setTodoList(data.todos);
+    if (!fetching) {
+      setTodoList(data?.todos || []);
     }
   }, [allTodos]);
   return <todoContext.Provider value={value}>{children}</todoContext.Provider>;
